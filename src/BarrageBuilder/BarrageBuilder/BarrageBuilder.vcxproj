@@ -144,6 +144,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="color.h" />
+    <ClInclude Include="font.h" />
     <ClInclude Include="manager.h" />
     <ClInclude Include="object.h" />
     <ClInclude Include="object_factory.h" />

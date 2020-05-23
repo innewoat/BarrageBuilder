@@ -1,0 +1,43 @@
+#pragma once
+#ifndef FONT_H
+#define FONT_H
+
+typedef unsigned char Font[2*16];
+
+class Fonts {
+public:
+	static Fonts& get_instance() {
+		static Fonts fonts;
+		return fonts;
+	}
+
+	Font& get_font(char c) {
+		return *fonts[c];
+	}
+
+private:
+	Font* fonts[256];
+	Font empty = {
+		0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,
+		0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,
+		0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,
+		0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0
+	};
+	Font A = {};
+
+
+	Fonts() {
+		initFonts();
+	}
+
+	void initFonts() {
+		for (int i = 0; i < 256; i++) {
+			fonts[i] = &empty;
+		}
+
+		fonts['a'] = &A;
+		fonts['A'] = &A;
+	}
+};
+
+#endif // !FONT_H

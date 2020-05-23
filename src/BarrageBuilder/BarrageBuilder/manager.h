@@ -36,12 +36,13 @@ public:
 		tracks.clear();
 
 		Object* testObject = new TestObject2(Vec2(120, 300), 40, 40);
-		Track* testTrack1 = new LineTrack(Vec2(120, 300), Vec2(120, 100));
+		LineTrack* testTrack1 = new LineTrack(Vec2(120, 300), Vec2(120, 100));
 		BezierCurveTrack* testTrack2 = new BezierCurveTrack();
 		testTrack2->points.push_back(Vec2(40, 300));
 		testTrack2->points.push_back(Vec2(40, 100));
 		testTrack2->points.push_back(Vec2(200, 100));
 
+		//testObject->setTrack(*testTrack1);
 		testObject->setTrack(*testTrack2);
 		
 		objects.push_back(testObject);

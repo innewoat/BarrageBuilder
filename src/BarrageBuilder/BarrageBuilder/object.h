@@ -6,6 +6,7 @@
 #include "track.h"
 #include "color.h"
 #include "primitive.h"
+#include "font.h"
 
 class Object {
 public:

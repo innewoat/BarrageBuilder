@@ -37,7 +37,9 @@ public:
 					int target_x = base_x + i;
 					int target_y = base_y + j;
 					if (target_x >= 0 && target_x < width && target_y >= 0 && target_y < height) {
-						pixels[target_y][target_x] = primitive->get_pixel(i, j);
+						if (primitive->get_pixel(i, j).a != 0) {
+							pixels[target_y][target_x] = primitive->get_pixel(i, j);
+						}
 					}
 				}
 			}

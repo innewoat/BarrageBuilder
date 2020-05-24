@@ -82,7 +82,7 @@ public:
 					res.set_pixel(i, j, c);
 				}
 				else {
-					res.set_pixel(i, j, 0x7f7f7fff);
+					res.set_pixel(i, j, 0x0000000);
 				}
 			}
 		}
@@ -120,7 +120,7 @@ private:
 					res.set_pixel(i + offset_x, j, Color(0x000000ff));
 				}
 				else {
-					res.set_pixel(i + offset_x, j, Color(0x7f7f7fff));
+					res.set_pixel(i + offset_x, j, Color(0x00000000));
 				}
 			}
 		}

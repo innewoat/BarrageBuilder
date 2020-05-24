@@ -7,10 +7,11 @@
 #include "color.h"
 #include "primitive.h"
 #include "font.h"
+#include <string>
 
 class Object {
 public:
-	Object(Vec2 p):pos(p),track_p(nullptr),track_t(0) {}
+	Object(Vec2 p) :pos(p), track_p(nullptr), track_t(0) {}
 
 	virtual void build_primitive(Primitive&) = 0;
 
@@ -36,7 +37,7 @@ protected:
 
 class TestObject1 :public Object {
 public:
-	TestObject1(Vec2 pos, int w, int h):Object(pos) {
+	TestObject1(Vec2 pos, int w, int h) :Object(pos) {
 		this->w = w;
 		this->h = h;
 	}
@@ -72,7 +73,7 @@ public:
 		res.h = h;
 
 		Color c(0xff0000ff);
-		
+
 		int temp = w * h - w * w - h * h;
 
 		for (int j = 0; j < res.h; j++) {
@@ -91,115 +92,38 @@ protected:
 	int h;
 };
 
-//class Object {
-//public:
-//	int x, y;
-//	int width, height;
-//
-//	Object(int w, int h) {
-//		width = w;
-//		height = h;
-//		x = 0;
-//		y = 0;
-//	}
-//
-//	void setXY(int x, int y) {
-//		this->x = x;
-//		this->y = y;
-//	}
-//
-//	virtual int getColor(int pos_x, int pox_y) {
-//		return 0x00000000;
-//	}
-//
-//	virtual void move() {};
-//};
-//
-//class TestObject :public Object {
-//private:
-//	float speed;
-//	int color;
-//
-//public:
-//	TestObject(int w, int h, float f, int c) :Object(w, h) {
-//		speed = -f;
-//		color = c;
-//	}
-//
-//	int getColor(int pos_x, int pos_y) {
-//		return color;
-//	}
-//
-//	void move() {
-//		y += speed;
-//	}
-//};
-//
-//class TestObject2 :public Object {
-//private:
-//	float p;
-//	int color;
-//	int x0, y0;
-//	int x1, y1;
-//	int x2, y2;
-//
-//public:
-//	TestObject2(int w, int h, int x, int y, float radio, int c) :Object(w, h) {
-//		p = 0;
-//		color = c;
-//		x0 = x;
-//		y0 = y;
-//		x2 = x;
-//		y2 = 0;
-//		x1 = x + radio * y;
-//		y1 = y / 2;
-//	}
-//
-//	int getColor(int pos_x, int pos_y) {
-//		return color;
-//	}
-//
-//	void move() {
-//		this->x = (1.0f - p) * (1.0f - p) * x0 + 2 * (1.0f - p) * p * x1 + p * p * x2;
-//		this->y = (1.0f - p) * (1.0f - p) * y0 + 2 * (1.0f - p) * p * y1 + p * p * y2;
-//
-//		p += 0.01f;
-//	}
-//};
-//
-//class TestObject3 :public Object {
-//private:
-//	float p;
-//	Vec2 start;
-//	Vec2 end;
-//	int color;
-//	BezierCurve move_curve;
-//
-//public:
-//	TestObject3(int w, int h, Vec2 s, Vec2 e, int c) :Object(w, h), start(s), end(e), color(c) {
-//		p = 0;
-//
-//		move_curve.addP(s);
-//
-//		Vec2 p = e - s;
-//		int px = p.x;
-//		int py = p.y;
-//
-//		move_curve.addP(s + Vec2((float)px * 3.5f, (float)py * 0.3f));
-//		move_curve.addP(s + Vec2(-(float)px * 3.5f, (float)py * 0.8f));
-//		move_curve.addP(e);
-//	}
-//
-//	int getColor(int pos_x, int pos_y) {
-//		return color;
-//	}
-//
-//	void move() {
-//		Vec2 now = move_curve.getP(p);
-//		this->x = now.x;
-//		this->y = now.y;
-//		p += 0.01f;
-//	}
-//};
+class TestObject3 :public Object {
+public:
+	TestObject3(Vec2 pos, std::string s) :Object(pos), content(s) {}
 
+	void build_primitive(Primitive& res) {
+		res.resize(FONT_SIZE * content.length(), FONT_SIZE);
+		res.w = FONT_SIZE * content.length();
+		res.h = FONT_SIZE;
+		res.x = this->pos.x - res.w / 2;
+		res.y = this->pos.y - res.h / 2;
+
+		const char* str = content.c_str();
+		for (int i = 0; i < content.length(); i++) {
+			Font& f = Fonts::get_instance().get_font(str[i]);
+			draw_char(res, f, i);
+		}
+	}
+private:
+	std::string content;
+
+	void draw_char(Primitive& res, Font& f, int index) {
+		int offset_x = index * FONT_SIZE;
+		for (int j = 0; j < FONT_SIZE; j++) {
+			for (int i = 0; i < FONT_SIZE; i++) {
+				if (need_draw(f, i, j)) {
+					res.set_pixel(i + offset_x, j, Color(0x000000ff));
+				}
+				else {
+					res.set_pixel(i + offset_x, j, Color(0x7f7f7fff));
+				}
+			}
+		}
+	}
+};
 #endif // !OBJECT_H

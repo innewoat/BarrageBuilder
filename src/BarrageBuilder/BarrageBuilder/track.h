@@ -26,14 +26,30 @@ class LineTrack :public Track {
 public:
 	LineTrack(const Vec2& s, const Vec2& e) :start(s), end(e) {}
 	Vec2 get_pos(float t) {
-		return (1 - t) * start + t * end;
+		return (1.0 - t) * start + t * end;
 	}
 private:
 	Vec2 start;
 	Vec2 end;
 };
 
-class BezierCurveTrack : public Track {
+class CycleLineTrack :public Track {
+public:
+	CycleLineTrack(const Vec2& s, const Vec2& e) :start(s), end(e) {}
+	Vec2 get_pos(float t) {
+		if (t < 0.5) {
+			return (1.0f - 2 * t) * start + 2 * t * end;
+		}
+		else {
+			return (2 * t - 1.0f) * start + (2.0f - 2 * t) * end;
+		}
+	}
+private:
+	Vec2 start;
+	Vec2 end;
+};
+
+class BezierCurveTrack :public Track {
 public:
 	BezierCurveTrack() :points() {}
 

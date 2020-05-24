@@ -2,7 +2,9 @@
 #ifndef FONT_H
 #define FONT_H
 
-typedef unsigned char Font[2 * 16];
+const static int FONT_SIZE = 16;
+
+typedef unsigned char Font[(FONT_SIZE / 8) * FONT_SIZE];
 
 class Fonts {
 public:
@@ -216,5 +218,16 @@ private:
 		fonts['z'] = &Z; fonts['Z'] = &Z;
 	}
 };
+
+bool need_draw(Font& f, int x, int y) {
+	int temp = 0x80;
+	int target = y * FONT_SIZE + x;
+
+	int n = target / 8;
+	int m = target % 8;
+
+	return (f[n] & (temp>>m)) != 0;
+}
+
 
 #endif // !FONT_H
